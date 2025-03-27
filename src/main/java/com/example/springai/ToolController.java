@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
@@ -29,6 +30,14 @@ public class ToolController {
         return chatClient
                 .prompt("bây giờ là mấy giờ")
                 .tools(new DateTimeTool())
+                .call()
+                .content();
+    }
+    @GetMapping("/tool")
+    public String query(@RequestParam String query) {
+        ChatClient chatClient = chatClientBuilder.build();
+        return chatClient.prompt(query)
+                .tools(new DWHController(), new DateTimeTool()) //DWHCOntroller is a 3rd AI services
                 .call()
                 .content();
     }
