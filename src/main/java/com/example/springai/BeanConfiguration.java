@@ -4,6 +4,8 @@ import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.QuestionAnswerAdvisor;
 import org.springframework.ai.chat.client.advisor.VectorStoreChatMemoryAdvisor;
 import org.springframework.ai.embedding.EmbeddingModel;
+import org.springframework.ai.tool.execution.DefaultToolExecutionExceptionProcessor;
+import org.springframework.ai.tool.execution.ToolExecutionExceptionProcessor;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.ai.vectorstore.redis.RedisVectorStore;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -26,6 +28,11 @@ public class BeanConfiguration {
     @Bean
     JedisPooled jedisPool() {
         return new JedisPooled(redisHost, redisPort); //Can we use redis cluster ???
+    }
+
+    @Bean
+    ToolExecutionExceptionProcessor toolExecutionExceptionProcessor() {
+        return new DefaultToolExecutionExceptionProcessor(true);
     }
 
     @Bean("chatMemoryVectorStore")

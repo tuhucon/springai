@@ -21,22 +21,27 @@ public class ToolController {
 
         @Tool(description = "provide the current date and time")
         public String getCurrentDateTime(ToolContext context) {
-            System.out.println("************run method getCurrentDateTime****************");
-            System.out.println("context: " + context.getContext());
-            System.out.println("tool call history: " + context.getToolCallHistory());
-            return LocalDateTime.now().toString();
+            throw new RuntimeException("system error");
+//            System.out.println("************run method getCurrentDateTime****************");
+//            System.out.println("context: " + context.getContext());
+//            System.out.println("tool call history: " + context.getToolCallHistory());
+//            return LocalDateTime.now().toString();
         }
     }
 
     @GetMapping("/now")
     public String now() {
-        ChatClient chatClient = chatClientBuilder.build();
-        return chatClient
-                .prompt("bây giờ là mấy giờ")
-                .tools(new DateTimeTool())
-                .toolContext(Map.of("workspace id", 1234, "workspace name", "tu hu con"))
-                .call()
-                .content();
+        try {
+            ChatClient chatClient = chatClientBuilder.build();
+            return chatClient
+                    .prompt("bây giờ là mấy giờ")
+                    .tools(new DateTimeTool())
+                    .toolContext(Map.of("workspace id", 1234, "workspace name", "tu hu con"))
+                    .call()
+                    .content();
+        } catch (Exception e) {
+            return "co loi xay ra: " + e.getMessage();
+        }
     }
     @GetMapping("/tool")
     public String query(@RequestParam String query) {
