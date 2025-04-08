@@ -10,6 +10,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class DWHController {
 
+    /**
+     * Endpoint to connect to the data warehouse, execute a query, and generate a report.
+     * The AI needs to pass the raw question of the user into the query parameter.
+     *
+     * @param query the raw question of the users
+     * @return a response string indicating the result of the query
+     */
     @GetMapping("/dwh")
     @Tool(
             description = """
@@ -20,7 +27,8 @@ public class DWHController {
             returnDirect = true
     )
     public String dwh(@ToolParam(description = "the raw question of the users") String query) {
-        return  "dwh - response of: " + query;
+        System.out.println("query: " + query);
+        return "dwh - response of: " + query;
     }
 
     @Tool(
