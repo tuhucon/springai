@@ -51,7 +51,7 @@ public class TimeController {
                     spec.text(TIME_TEMPLATE)
                         .param("city", city);
                 })
-                .functions("getTime")
+                .tools("getTime")
                 .call()
                 .content();
     }

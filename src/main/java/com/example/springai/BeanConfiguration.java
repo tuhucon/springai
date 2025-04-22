@@ -1,8 +1,6 @@
 package com.example.springai;
 
 import org.springframework.ai.chat.client.ChatClient;
-import org.springframework.ai.chat.client.advisor.QuestionAnswerAdvisor;
-import org.springframework.ai.chat.client.advisor.VectorStoreChatMemoryAdvisor;
 import org.springframework.ai.embedding.EmbeddingModel;
 import org.springframework.ai.tool.execution.DefaultToolExecutionExceptionProcessor;
 import org.springframework.ai.tool.execution.ToolExecutionExceptionProcessor;
@@ -53,8 +51,8 @@ public class BeanConfiguration {
         return builder
                 .defaultSystem("AI cần trả lời người dùng bằng tiếng Việt.")
                 .defaultSystem("AI tên là Kathy, giới tính nữ nên cần xưng em và nói chuyện lịch sự với người dùng.")
-                .defaultAdvisors( new VectorStoreChatMemoryAdvisor(chatMemoryVectorStore),
-                        new QuestionAnswerAdvisor(vectorStore))
+//                .defaultAdvisors( new VectorStoreChatMemoryAdvisor(chatMemoryVectorStore),
+//                        new RetrievalAdvisor(vectorStore))
                 .build();
     }
 
