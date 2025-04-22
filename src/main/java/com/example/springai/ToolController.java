@@ -1,21 +1,30 @@
 package com.example.springai;
 
+import io.modelcontextprotocol.client.McpSyncClient;
+import io.modelcontextprotocol.spec.McpSchema;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.model.ToolContext;
+import org.springframework.ai.mcp.SyncMcpToolCallbackProvider;
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 public class ToolController {
 
     private final ChatClient.Builder chatClientBuilder;
+
+    private final List<McpSyncClient> mcpClients;
 
     public static class DateTimeTool {
 
@@ -45,10 +54,20 @@ public class ToolController {
     }
     @GetMapping("/tool")
     public String query(@RequestParam String query) {
+
+        McpSyncClient mcpClient = mcpClients.getFirst();
+        McpSchema.CallToolRequest request = new McpSchema.CallToolRequest("randomName", new HashMap<>());
+
+        var result = mcpClient.callTool(request).content();
+
+        log.info("********MCP RESULT**********" + result.getFirst().toString());
+
+
         ChatClient chatClient = chatClientBuilder.build();
         return chatClient.prompt(query)
                 .tools(new DWHController(), new DateTimeTool()) //DWHCOntroller is a 3rd AI services
                 .call()
                 .content();
+
     }
 }
