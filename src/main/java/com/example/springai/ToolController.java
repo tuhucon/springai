@@ -55,17 +55,22 @@ public class ToolController {
     @GetMapping("/tool")
     public String query(@RequestParam String query) {
 
-        McpSyncClient mcpClient = mcpClients.getFirst();
-        McpSchema.CallToolRequest request = new McpSchema.CallToolRequest("randomName", new HashMap<>());
+//        McpSyncClient mcpClient = mcpClients.getFirst();
+//        McpSchema.CallToolRequest request = new McpSchema.CallToolRequest("randomName", new HashMap<>());
+//
+//        var result = mcpClient.callTool(request).content();
+//
+//        log.info("********MCP RESULT**********" + result.getFirst().toString());
 
-        var result = mcpClient.callTool(request).content();
 
-        log.info("********MCP RESULT**********" + result.getFirst().toString());
+        SyncMcpToolCallbackProvider toolCallbackProvider = new SyncMcpToolCallbackProvider(mcpClients);
 
 
         ChatClient chatClient = chatClientBuilder.build();
         return chatClient.prompt(query)
                 .tools(new DWHController(), new DateTimeTool()) //DWHCOntroller is a 3rd AI services
+                .tools(toolCallbackProvider)
+                .toolContext(Map.of("workspace id", 1234, "workspace name", "tu hu con"))
                 .call()
                 .content();
 

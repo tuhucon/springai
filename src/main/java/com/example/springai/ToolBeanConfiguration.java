@@ -1,5 +1,6 @@
 package com.example.springai;
 
+import org.springframework.ai.mcp.SyncMcpToolCallbackProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Description;
@@ -16,4 +17,5 @@ public class ToolBeanConfiguration {
     Function<String, Double> getInterest() {
         return Double::parseDouble;
     }
+
 }
